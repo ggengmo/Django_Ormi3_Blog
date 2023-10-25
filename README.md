@@ -1,0 +1,1 @@
+# Django_Ormi3_Blog
