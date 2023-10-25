@@ -1,0 +1,8 @@
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input type="submit" value="작성하기">
+    <input type="button" value='취소' onclick="window.location='{% url 'blog:post_list' %}';">
+</form>

@@ -1,0 +1,10 @@
+<ul>
+    {% for post in post_list %}
+    <li>
+        <a href="{% url 'blog:post_detail' post.pk %}">
+            {{ post.title }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'blog:post_write' %}">글 작성</a>
