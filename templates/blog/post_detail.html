@@ -13,6 +13,10 @@
     {% if post.main_image %}
         <img src="{{ post.main_image.url }}" alt="">
     {% endif %}
+    <br>
+    {% for tag in post.tag.all  %}
+        #{{tag.name}}
+    {% endfor %}
     <p>{{post.content}}</p>
 </body>
     
