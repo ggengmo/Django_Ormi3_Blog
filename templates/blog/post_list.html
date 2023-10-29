@@ -9,19 +9,10 @@
     
 <body>
     <h1>글 목록</h1>
-    <form action="" method='GET'>
+    <form action="{% url 'blog:post_search' %}" method='GET'>
         <input type="text" name='q' value='{{ request.GET.q }}'>
         <input type="submit" value='검색'>
     </form>
-<ul>
-    {% for post in post_list %}
-    <li>
-        <a href="{% url 'tube:post_detail' post.pk %}">
-            {{ post.title }}
-        </a>
-    </li>
-    {% endfor %}
-</ul>
     <ul>
         {% for post in post_list  %}
             <li>

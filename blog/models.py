@@ -18,6 +18,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     tag = models.ManyToManyField(Tag)
+    is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
