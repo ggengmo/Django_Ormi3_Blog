@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        /* Your custom CSS styles go here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+        }
+        .container {
+            text-align: center;
+            padding: 100px;
+        }
+        h1 {
+            font-size: 48px;
+            color: #ff5733;
+        }
+        p {
+            font-size: 18px;
+            color: #555;
+        }
+    </style>
+</head>
+    
+<body>
+    <div class="container">
+        <h1>Oops! Permission not found</h1>
+        <p>You do not have permission for that page. Let's get you back on track:</p>
+        <a href="{% url "blog:post_list" %}" style="text-decoration: none; color: #ff5733;">블로그로 돌아가기</a>
+    </div>
+</body>
+    
+</html>
