@@ -12,6 +12,7 @@ class Profile(models.Model):
     nickname = models.CharField(max_length=255)
     email = models.EmailField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+    profile_image = models.ImageField(upload_to='accounts/profile_img/%Y/%m/%d/', blank=True)
 
     def __str__(self):
         return self.name

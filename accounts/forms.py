@@ -2,6 +2,7 @@
 
 from django import forms
 from django.contrib.auth.forms import PasswordChangeForm
+from .models import Profile
 
 class PasswordForm(PasswordChangeForm):
     old_password = forms.CharField(
@@ -27,3 +28,15 @@ class PasswordForm(PasswordChangeForm):
             )
         else:
             return self.cleaned_data
+        
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['profile_image', 'name', 'nickname', 'email']
+
+    def __init__(self, *args, **kwargs):
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        self.fields['profile_image'].label = '프로필 사진'
+        self.fields['name'].label = '이름'
+        self.fields['nickname'].label = '닉네임'
+        self.fields['email'].label = '이메일'

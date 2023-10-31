@@ -1,12 +1,13 @@
 # accounts > views.py
 
+from typing import Any
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, UpdateView
 from django.urls import reverse_lazy
 from . models import Profile
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import PasswordForm
+from .forms import PasswordForm, ProfileForm
 
 class SignCreateView(CreateView):
     form_class = UserCreationForm
@@ -43,4 +44,24 @@ class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
     success_url = reverse_lazy('accounts:profile')
 
 change_password = ChangePasswordView.as_view()
+
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    model = Profile
+    form_class = ProfileForm
+    template_name = 'accounts/profile_update.html'
+    success_url = reverse_lazy('accounts:profile')
+
+    def get_object(self):
+        return self.request.user.profile
     
+    # def get_initial(self):
+    #     return {'name': '', 'nickname': '', 'email': ''}
+
+    def form_valid(self, form):
+        profile = form.save(commit=False)
+        profile.user.email = form.cleaned_data.get('email')
+        profile.user.save()
+        profile.save()
+        return super().form_valid(form)
+    
+profile_update = ProfileUpdateView.as_view()

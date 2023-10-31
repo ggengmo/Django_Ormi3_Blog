@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로필 수정</title>
+    
+</head>
+    
+<body>
+    {% if profile.profile_image %}
+        현재 프로필 사진:<br>
+        <img src="{{profile.profile_image.url}}" alt="">
+    {% endif %}
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">수정하기</button>
+    </form>
+</body>
+    
+</html>
