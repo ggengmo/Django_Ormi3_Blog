@@ -1,13 +1,12 @@
 # accounts > views.py
 
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.views import LoginView, LogoutView
-from django.shortcuts import render
-from django.views.generic import CreateView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
+from django.views.generic import CreateView, DetailView
 from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect
+from . models import Profile
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import PasswordForm
 
 class SignCreateView(CreateView):
     form_class = UserCreationForm
@@ -28,3 +27,20 @@ class LogoutView(LogoutView):
     next_page = reverse_lazy('main:index')
 
 logout = LogoutView.as_view()
+
+class ProfileView(LoginRequiredMixin, DetailView):
+    model = Profile
+    template_name = 'accounts/profile.html'
+    
+    def get_object(self):
+        return self.request.user.profile
+
+profile = ProfileView.as_view()
+
+class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
+    form_class = PasswordForm
+    template_name = 'accounts/change_password.html'
+    success_url = reverse_lazy('accounts:profile')
+
+change_password = ChangePasswordView.as_view()
+    

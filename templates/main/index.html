@@ -16,6 +16,9 @@
     <a href="{% url 'accounts:signup' %}" style="text-decoration: none; color: #ff5733;">회원가입</a>
     <a href="{% url 'accounts:login' %}" style="text-decoration: none; color: #ff5733;">로그인</a>
     {% endif %}
+    {% if user.is_authenticated %}
+    <a href="{% url 'accounts:profile' %}" style="text-decoration: none; color: #ff5733;">프로필</a>
+    {% endif %}
 </body>
     
 </html>
