@@ -45,13 +45,13 @@ class PostDetailView(DetailView):
             comment.post = self.get_object()
             comment.author = request.user
             comment.save()
-            return redirect('blog:post_detail', pk=self.get_object().pk)  # 댓글을 작성한 게시글로 리다이렉트
+            return redirect('blog:post_detail', pk=self.get_object().pk)
         else:
-            return self.get(request, *args, **kwargs)  # form이 유효하지 않으면 페이지를 새로고침
+            return self.get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['top_level_comments'] = self.object.comments.filter(nested_reply__isnull=True)
+        context['top_level_comments'] = self.object.comments.filter(nested_reply__isnull=True).order_by('-created_at')
         context['comment_form'] = CommentForm()
         return context
     
@@ -122,7 +122,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.post_id = self.kwargs['pk']
         form.instance.author = self.request.user
-        form.instance.nested_reply_id = self.request.POST.get('nested_reply')  # 수정한 부분
+        form.instance.nested_reply_id = self.request.POST.get('nested_reply')
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -148,7 +148,7 @@ class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return super().handle_no_permission()
     
     def form_valid(self, form):
-        form.instance.nested_reply_id = self.request.POST.get('nested_reply')  # 수정한 부분
+        form.instance.nested_reply_id = self.request.POST.get('nested_reply')
         return super().form_valid(form)
     
 comment_edit = CommentUpdateView.as_view()

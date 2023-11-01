@@ -15,3 +15,7 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['message', 'nested_reply']
+        widgets = {
+            'nested_reply': forms.HiddenInput(),
+        }
+
