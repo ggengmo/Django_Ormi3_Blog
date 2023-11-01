@@ -14,4 +14,4 @@ class TagForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['message']
+        fields = ['message', 'nested_reply']

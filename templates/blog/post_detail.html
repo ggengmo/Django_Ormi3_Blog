@@ -25,15 +25,32 @@
     <p>{{post.content}}</p>
     <section>
         <h3>댓글</h3>
-        {% for comment in post.comments.all  %}
-            <strong>{{comment.author}}</strong>
-            <p>{{comment.message}}</p>
-            <p>{{comment.updated_at}}</p>
-            {% empty %}
+        {% for comment in top_level_comments %}
+            <div class="comment">
+                <p>작성 날짜:{{comment.updated_at}}</p>
+                <strong>작성자: {{comment.author}}</strong>
+                <p>댓글: {{comment.message}}</p>
+                <a href="{% url "blog:comment_edit" post.pk comment.pk %}" style="text-decoration: none; color: #ff5733;">수정</a>
+                <a href="{% url "blog:comment_delete" post.pk comment.pk %}" style="text-decoration: none; color: #ff5733;">삭제</a>
+            </div>
+            {% for child_comment in comment.reply.all %}
+                <div style="margin-left: 50px;">
+                    <h3>대댓글</h3>
+                    <div style='font-size:12px;'>
+                        <p>작성 날짜:{{child_comment.updated_at}}</p>
+                        <strong>작성자: {{child_comment.author}}</strong>
+                        <p>대댓글: {{child_comment.message}}</p>
+                        <a href="{% url "blog:comment_edit" post.pk child_comment.pk %}" style="text-decoration: none; color: #ff5733;">수정</a>
+                        <a href="{% url "blog:comment_delete" post.pk child_comment.pk %}" style="text-decoration: none; color: #ff5733;">삭제</a>
+                    </div>
+                </div>
+            {% endfor %}
+            <br>
+        {% empty %}
             <p>아직 댓글이 없습니다. :(</p>
         {% endfor %}
     </section>
-
+    
     <section>
         <h3>댓글작성</h3>
         <form method="post">

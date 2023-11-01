@@ -51,6 +51,7 @@ class PostDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['top_level_comments'] = self.object.comments.filter(nested_reply__isnull=True)
         context['comment_form'] = CommentForm()
         return context
     
@@ -114,18 +115,58 @@ class SearchListView(ListView):
 
 post_search = SearchListView.as_view()
 
-class CommentCreateView(CreateView):
-
+class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
     form_class = CommentForm
-    template_name = 'blog/comment_new.html'
 
     def form_valid(self, form):
         form.instance.post_id = self.kwargs['pk']
         form.instance.author = self.request.user
+        form.instance.nested_reply_id = self.request.POST.get('nested_reply')  # 수정한 부분
         return super().form_valid(form)
 
     def get_success_url(self):
         return self.object.post.get_absolute_url()
 
 comment_new = CommentCreateView.as_view()
+
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/form3.html'
+
+    def get_success_url(self):
+        return reverse_lazy('blog:post_detail', kwargs={'pk':self.object.post.pk})
+    
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
+    
+    def handle_no_permission(self): 
+        if self.raise_exception or self.request.user.is_authenticated:
+            return render(self.request, 'blog/403.html', status=403)
+        return super().handle_no_permission()
+    
+    def form_valid(self, form):
+        form.instance.nested_reply_id = self.request.POST.get('nested_reply')  # 수정한 부분
+        return super().form_valid(form)
+    
+comment_edit = CommentUpdateView.as_view()
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+    template_name = 'blog/comment_confirm_delete.html'
+
+    def get_success_url(self):
+        return reverse_lazy('blog:post_detail', kwargs={'pk':self.object.post.pk})
+    
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
+    
+    def handle_no_permission(self): 
+        if self.raise_exception or self.request.user.is_authenticated:
+            return render(self.request, 'blog/403.html', status=403)
+        return super().handle_no_permission()
+
+comment_delete = CommentDeleteView.as_view()

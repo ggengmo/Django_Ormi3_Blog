@@ -38,6 +38,7 @@ class Comment(models.Model):
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
+    nested_reply = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='reply')
 
     def __str__(self):
         return self.message
