@@ -14,11 +14,35 @@
     {% if post.main_image %}
         <img src="{{ post.main_image.url }}" alt="">
     {% endif %}
+
+    {% if post.file_upload %}
+        <video src="{{post.file_upload.url}}" controls></video>
+    {% endif %}
     <br>
     {% for tag in post.tag.all  %}
         #{{tag.name}}
     {% endfor %}
     <p>{{post.content}}</p>
+    <section>
+        <h3>댓글</h3>
+        {% for comment in post.comments.all  %}
+            <strong>{{comment.author}}</strong>
+            <p>{{comment.message}}</p>
+            <p>{{comment.updated_at}}</p>
+            {% empty %}
+            <p>아직 댓글이 없습니다. :(</p>
+        {% endfor %}
+    </section>
+
+    <section>
+        <h3>댓글작성</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{comment_form.as_p}}
+            <input type="submit" value="댓글 작성">
+        </form>
+    </section>
+
     <a href="{% url "blog:post_list" %}" style="text-decoration: none; color: #ff5733;">뒤로가기</a>
     <a href="{% url "blog:post_edit" post.pk %}" style="text-decoration: none; color: #ff5733;">수정</a>
     <a href="{% url "blog:post_delete" post.pk %}" style="text-decoration: none; color: #ff5733;">삭제</a>
