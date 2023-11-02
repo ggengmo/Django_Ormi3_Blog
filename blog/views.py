@@ -51,7 +51,7 @@ class PostDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['top_level_comments'] = self.object.comments.filter(nested_reply__isnull=True).order_by('-created_at')
+        context['top_comments'] = self.object.comments.filter(nested_reply__isnull=True).order_by('-created_at')
         context['comment_form'] = CommentForm()
         return context
     

@@ -1,42 +1,42 @@
-<!DOCTYPE html>
-<html lang="ko-KR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>글 목록</title>
-    
-</head>
-    
-<body>
-    <h1>글 목록</h1>
-
-    {% if user.is_authenticated %}
-        <p>어서오세요, {{ user.username }}!</p>
-    {% else %}
-        <p>게스트 사용자</p>
-    {% endif %}
-
-    {% comment %} {% if request.user.is_authenticated %}
-    <a href="{% url 'accounts:logout' %}">로그아웃</a>
-    {% else %}
-    <a href="{% url 'accounts:signup' %}">회원가입</a>
-    <a href="{% url 'accounts:login' %}">로그인</a>
-    {% endif %} {% endcomment %}
-    <form action="{% url 'blog:post_search' %}" method='GET'>
-        <input type="text" name='q' value='{{ request.GET.q }}'>
-        <input type="submit" value='검색'>
-    </form>
-    <ul>
-        {% for post in post_list  %}
-        <li>
-            <a href="{% url 'blog:post_detail' post.pk %}" style="text-decoration: none; color: #ff5733;">
-                {{post.title}}
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
-    <a href="{% url "main:index" %}" style="text-decoration: none; color: #ff5733;">홈으로 가기</a>
-    <a href="{% url "blog:post_write" %}" style="text-decoration: none; color: #ff5733;">글 작성하기</a>
-</body>
-
-</html>
+{% extends "base.html" %}
+{% block content %}
+{% load static %}  
+        <!-- Page Header--> 
+        <header class="masthead" style="background-image: url('{% static "assets/img/home-bg.jpg" %}')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                            <h1>Cooking Blog</h1>
+                            <span class="subheading">A Blog Theme by Start Bootstrap</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content-->
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <!-- Post preview-->
+                    <div class="post-preview">
+                        {% for post in post_list %}
+                        <a href="{% url 'blog:post_detail' post.pk %}">
+                            <h2 class="post-title">{{post.title}}</h2>
+                        </a>
+                            <h3 class="post-subtitle"></h3>
+                        <p class="post-meta">
+                            {{post.created_at}},
+                            Posted by
+                            {{post.author}}
+                        </p>
+                        {% endfor %}
+                    </div>
+                    <!-- Divider-->
+                    <hr class="my-4">
+                    <!-- Pager-->
+                    <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="{% url "blog:post_write" %}">글 작성하기</a></div>
+                </div>
+            </div>
+        </div>
+        {% endblock content %}

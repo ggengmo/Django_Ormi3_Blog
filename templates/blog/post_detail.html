@@ -1,93 +1,115 @@
-<!DOCTYPE html>
-<html lang="ko-KR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{post.title}}</title>
-</head>
-    
-<body>
-    <h1>{{post.title}}</h1>
-    <p>조회수 : {{post.view_count}}</p>
-    <p>{{post.author}}</p>
-    {% if post.main_image %}
-        <img src="{{ post.main_image.url }}" alt="">
-    {% endif %}
-
-    {% if post.file_upload %}
-        <video src="{{post.file_upload.url}}" controls></video>
-    {% endif %}
-    <br>
-    {% for tag in post.tag.all  %}
-        #{{tag.name}}
-    {% endfor %}
-    <p>{{post.content}}</p>
-    <section>
-        <h3>댓글</h3>
-        {% for comment in top_level_comments %}
-            <div class="comment">
-                <p>작성 날짜:{{comment.updated_at}}</p>
-                <strong>작성자: {{comment.author}}</strong>
-                <p>댓글: {{comment.message}}</p>
-                <a href="{% url "blog:comment_edit" post.pk comment.pk %}" style="text-decoration: none; color: #ff5733;">수정</a>
-                <a href="{% url "blog:comment_delete" post.pk comment.pk %}" style="text-decoration: none; color: #ff5733;">삭제</a>
-
-                <button class="reply-btn">답글 달기</button>
-
-                <div class="reply-form" style="display: none;">
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ comment_form.as_p }}
-                        <input type="hidden" name="nested_reply" value="{{ comment.id }}">
-                        <input type="submit" value="답글 작성">
-                    </form>
-                </div>
-                
-
-                {% for child_comment in comment.reply.all %}
-                    <div style="margin-left: 50px;">
-                        <h3>대댓글</h3>
-                        <div style='font-size:12px;'>
-                            <p>작성 날짜:{{child_comment.updated_at}}</p>
-                            <strong>작성자: {{child_comment.author}}</strong>
-                            <p>대댓글: {{child_comment.message}}</p>
-                            <a href="{% url "blog:comment_edit" post.pk child_comment.pk %}" style="text-decoration: none; color: #ff5733;">수정</a>
-                            <a href="{% url "blog:comment_delete" post.pk child_comment.pk %}" style="text-decoration: none; color: #ff5733;">삭제</a>
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+        <!-- Page Header-->
+        <header class="masthead" style="background-image: url('{{ post.main_image.url }}')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="post-heading">
+                            <h1>{{post.title}}</h1>
+                            <br>
+                            <h2 class="subheading">
+                                {% for tag in post.tag.all  %}
+                                    #{{tag.name}}
+                                {% endfor %}
+                            </h2>
+                            <span class="meta">
+                                {{post.created_at}},
+                                Posted by
+                                {{post.author}}
+                            </span>
                         </div>
                     </div>
-                {% endfor %}
+                </div>
             </div>
-            <br>
-        {% empty %}
-            <p>아직 댓글이 없습니다. :(</p>
-        {% endfor %}
-    </section>
-    
-    <section>
-        <h3>댓글작성</h3>
-        <form method="post">
-            {% csrf_token %}
-            {{comment_form.as_p}}
-            <input type="submit" value="댓글 작성">
-        </form>
-    </section>
+        </header>
+        <!-- Post Content-->
+        <article class="mb-4">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        {% if post.main_image %}
+                            <img src="{{ post.main_image.url }}" alt="">
+                        {% endif %}
+                        {% if post.file_upload %}
+                            <video src="{{post.file_upload.url}}" controls></video>
+                        {% endif %}
+                        <p>{{post.content}}</p>
+                        <h2 class="section-heading">The Final Frontier</h2>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus ea ex magnam. Laborum mollitia dolorem recusandae saepe aspernatur, at ullam totam dolor autem perspiciatis, nesciunt, illum enim beatae tempore fuga.</p>
+                        <blockquote class="blockquote"></blockquote>
+                        <h2 class="section-heading">Reaching for the Stars</h2>
+                        <p>As we got further and further away, it [the Earth] diminished in size. Finally it shrank to the size of a marble, the most beautiful you can imagine. That beautiful, warm, living object looked so fragile, so delicate, that if you touched it with a finger it would crumble and fall apart. Seeing this has to change a man.</p>
+                        <a href="#!"><img class="img-fluid" src="{% static "assets/img/post-sample-image.jpg" %}" alt="..." /></a>
+                        <span class="caption text-muted">To go places and do things that have never been done before – that’s what living is all about.</span>
+                        <p>Space, the final frontier. These are the voyages of the Starship Enterprise. Its five-year mission: to explore strange new worlds, to seek out new life and new civilizations, to boldly go where no man has gone before.</p>
+                        <p>As I stand out here in the wonders of the unknown at Hadley, I sort of realize there’s a fundamental truth to our nature, Man must explore, and this is exploration at its greatest.</p>
+                        <p>
+                            Placeholder text by
+                            <a href="http://spaceipsum.com/">Space Ipsum</a>
+                            &middot; Images by
+                            <a href="https://www.flickr.com/photos/nasacommons/">NASA on The Commons</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <section class="gradient-custom">
+    <div class="container my-5 py-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-12 col-lg-10 col-xl-8">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h4 class="text-center mb-4 pb-2">댓글</h4>
+                        {% for comment in top_comments %}
+                            <div class="d-flex flex-start">
+                                <img class="rounded-circle shadow-1-strong me-3"
+                                    src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(10).webp" alt="avatar" width="65"
+                                    height="65" />
+                                <div class="flex-grow-1 flex-shrink-1">
+                                    <div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <p class="mb-1">
+                                                {{comment.author}} <span class="small">- {{comment.updated_at}}</span>
+                                                <a href="{% url "blog:comment_edit" post.pk comment.pk %}" style="text-decoration: none; color: #ff5733;">수정</a>
+                                                <a href="{% url "blog:comment_delete" post.pk comment.pk %}" style="text-decoration: none; color: #ff5733;">삭제</a>
+                                            </p>
+                                        </div>
+                                        <p class="small mb-0">{{comment.message}}</p>
+                                    </div>
+                                    {% for child_comment in comment.reply.all %}
+                                        <div class="d-flex flex-start mt-4" style="margin-left: 50px;">
+                                            <a class="me-3" href="#">
+                                                <img class="rounded-circle shadow-1-strong"
+                                                src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(11).webp" alt="avatar"
+                                                width="65" height="65" />
+                                            </a>
+                                            <div class="flex-grow-1 flex-shrink-1">
+                                                <div>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <p class="mb-1">
+                                                            {{child_comment.author}} <span class="small">- {{child_comment.updated_at}}</span>
+                                                            <a href="{% url "blog:comment_edit" post.pk child_comment.pk %}" style="text-decoration: none; color: #ff5733;">수정</a>
+                                                            <a href="{% url "blog:comment_delete" post.pk child_comment.pk %}" style="text-decoration: none; color: #ff5733;">삭제</a>
+                                                        </p>
+                                                    </div>
+                                                    <p class="small mb-0">{{child_comment.message}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p class="text-center">아직 댓글이 없습니다. :(</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <a href="{% url "blog:post_list" %}" style="text-decoration: none; color: #ff5733;">뒤로가기</a>
-    <a href="{% url "blog:post_edit" post.pk %}" style="text-decoration: none; color: #ff5733;">수정</a>
-    <a href="{% url "blog:post_delete" post.pk %}" style="text-decoration: none; color: #ff5733;">삭제</a>
-
-    <script>
-    document.querySelectorAll('.reply-btn').forEach(function(button) {
-        button.addEventListener('click', function() {
-            var form = button.parentElement.querySelector('.reply-form');
-            if (form.style.display === 'none') {
-                form.style.display = 'block';
-            } else {
-                form.style.display = 'none';
-            }
-        });
-    });
-    </script>
-</body>
-    
-</html>
+            
+        </article>
+        {% endblock content %}
