@@ -9,13 +9,20 @@ from django.urls import reverse_lazy
 from django.db.models import Q
 from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.paginator import Paginator
 
 class PostListView(ListView):
     model = Post
+    paginate_by = 4
 
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(is_deleted=False)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tags'] = Tag.objects.all()  # 태그 리스트를 컨텍스트에 추가합니다.
+        return context
     
 post_list = PostListView.as_view()
 
@@ -105,6 +112,7 @@ post_delete = PostDeleteView.as_view()
 
 class SearchListView(ListView):
     model = Post
+    paginate_by = 4
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -112,6 +120,11 @@ class SearchListView(ListView):
         if q:
             qs = qs.filter(Q(title__contains=q) | Q(tag__name__contains=q)).distinct().order_by('-created_at').filter(is_deleted=False)
         return qs
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tags'] = Tag.objects.all()
+        return context
 
 post_search = SearchListView.as_view()
 
