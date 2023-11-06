@@ -60,6 +60,7 @@ class PostDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['top_comments'] = self.object.comments.filter(nested_reply__isnull=True).order_by('-created_at')
         context['comment_form'] = CommentForm()
+        context['tags'] = Tag.objects.all()
         return context
     
 post_detail = PostDetailView.as_view()

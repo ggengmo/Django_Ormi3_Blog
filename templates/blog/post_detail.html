@@ -1,93 +1,116 @@
-<!DOCTYPE html>
-<html lang="ko-KR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{post.title}}</title>
-</head>
-    
-<body>
-    <h1>{{post.title}}</h1>
-    <p>조회수 : {{post.view_count}}</p>
-    <p>{{post.author}}</p>
-    {% if post.main_image %}
-        <img src="{{ post.main_image.url }}" alt="">
-    {% endif %}
-
-    {% if post.file_upload %}
-        <video src="{{post.file_upload.url}}" controls></video>
-    {% endif %}
-    <br>
-    {% for tag in post.tag.all  %}
-        #{{tag.name}}
-    {% endfor %}
-    <p>{{post.content}}</p>
-    <section>
-        <h3>댓글</h3>
-        {% for comment in top_comments %}
-            <div class="comment">
-                <p>작성 날짜:{{comment.updated_at}}</p>
-                <strong>작성자: {{comment.author}}</strong>
-                <p>댓글: {{comment.message}}</p>
-                <a href="{% url "blog:comment_edit" post.pk comment.pk %}" style="text-decoration: none; color: #ff5733;">수정</a>
-                <a href="{% url "blog:comment_delete" post.pk comment.pk %}" style="text-decoration: none; color: #ff5733;">삭제</a>
-
-                <button class="reply-btn">답글 달기</button>
-
-                <div class="reply-form" style="display: none;">
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ comment_form.as_p }}
-                        <input type="hidden" name="nested_reply" value="{{ comment.id }}">
-                        <input type="submit" value="답글 작성">
-                    </form>
-                </div>
-                
-
-                {% for child_comment in comment.reply.all %}
-                    <div style="margin-left: 50px;">
-                        <h3>대댓글</h3>
-                        <div style='font-size:12px;'>
-                            <p>작성 날짜:{{child_comment.updated_at}}</p>
-                            <strong>작성자: {{child_comment.author}}</strong>
-                            <p>대댓글: {{child_comment.message}}</p>
-                            <a href="{% url "blog:comment_edit" post.pk child_comment.pk %}" style="text-decoration: none; color: #ff5733;">수정</a>
-                            <a href="{% url "blog:comment_delete" post.pk child_comment.pk %}" style="text-decoration: none; color: #ff5733;">삭제</a>
+{% extends "base.html" %}
+{% block content %}
+        <!-- Page content-->
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Post content-->
+                    <article>
+                        <!-- Post header-->
+                        <header class="mb-4">
+                            <!-- Post title-->
+                            <h1 class="fw-bolder mb-1">{{post.title}}</h1>
+                            <!-- Post meta content-->
+                            <div class="text-muted fst-italic mb-2">Posted on {{post.created_at}} by {{post.author}}</div>
+                            <!-- Post categories-->
+                            {% for tag in post.tag.all  %}
+                            <a class="badge bg-secondary text-decoration-none link-light" href="{% url 'blog:post_search' %}?q={{ tag.name }}">{{ tag.name }}</a>
+                            {% endfor %}
+                        </header>
+                        <!-- Preview image figure-->
+                        {% if post.main_image %}
+                        <figure class="mb-4">
+                            <img class="img-fluid rounded" src="{{ post.main_image.url }}" alt="">
+                            {% else %}
+                            <img class="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." />
+                        </figure>
+                        {% endif %}
+                        <!-- Post content-->
+                        <section class="mb-5">
+                            <p class="fs-5 mb-4">Science is an enterprise that should be cherished as an activity of the free human mind. Because it transforms who we are, how we live, and it gives us an understanding of our place in the universe.</p>
+                            <p class="fs-5 mb-4">The universe is large and old, and the ingredients for life as we know it are everywhere, so there's no reason to think that Earth would be unique in that regard. Whether of not the life became intelligent is a different question, and we'll see if we find that.</p>
+                            <p class="fs-5 mb-4">If you get asteroids about a kilometer in size, those are large enough and carry enough energy into our system to disrupt transportation, communication, the food chains, and that can be a really bad day on Earth.</p>
+                            <h2 class="fw-bolder mb-4 mt-5">I have odd cosmic thoughts every day</h2>
+                            <p class="fs-5 mb-4">For me, the most fascinating interface is Twitter. I have odd cosmic thoughts every day and I realized I could hold them to myself or share them with people who might be interested.</p>
+                            <p class="fs-5 mb-4">Venus has a runaway greenhouse effect. I kind of want to know what happened there because we're twirling knobs here on Earth without knowing the consequences of it. Mars once had running water. It's bone dry today. Something bad happened there as well.</p>
+                        </section>
+                    </article>
+                    <!-- Comments section-->
+                    <section class="mb-5">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <!-- Comment form-->
+                                <form class="mb-4" method="post">
+                                    {% csrf_token %}
+                                    <textarea class="form-control" id="{{ comment_form.message.id_for_label }}" name="{{ comment_form.message.html_name }}" rows="3" placeholder="댓글을 작성해 보세요!">{{ comment_form.message.value|default:'' }}</textarea>
+                                    <br>
+                                    <input class="btn btn-primary" type="submit" value="작성">
+                                </form>
+                                {% for comment in top_comments %}
+                                    <!-- Comment with nested comments-->
+                                    <div class="d-flex mb-4">
+                                        <!-- Parent comment-->
+                                        <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                        <div class="ms-3" style="margin-left: 0; width: 100%;">
+                                            <div class="fw-bold">{{ comment.author }}</div>
+                                            {{ comment.message }}
+                                            <a href="{% url "blog:comment_edit" post.pk comment.pk %}"><i class="fa-regular fa-pen-to-square fa-bounce" style="color: #0d6efd;"></i></a>
+                                            <a href="{% url "blog:comment_delete" post.pk comment.pk %}"><i class="fa-regular fa-trash-can fa-bounce" style="color: #0d6efd;"></i></a>
+                                            <button class="reply-btn"><i class="fa-solid fa-reply fa-bounce" style="color: #0d6efd;"></i></button>
+                                            <div class="reply-form" style="display: none;">
+                                                <form class="mb-4" method="post">
+                                                    {% csrf_token %}
+                                                    <textarea class="form-control" id="{{ comment_form.message.id_for_label }}" name="{{ comment_form.message.html_name }}" rows="3" placeholder="답글을 작성해 보세요!">{{ comment_form.message.value|default:'' }}</textarea>
+                                                    <input type="hidden" name="nested_reply" value="{{ comment.id }}">
+                                                    <br>
+                                                    <input class="btn btn-primary" type="submit" value="작성">
+                                                </form>
+                                                
+                                            </div>
+                                            <!-- Child comments -->
+                                            {% for child_comment in comment.reply.all %}
+                                                <div class="d-flex mt-4">
+                                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                                    <div class="ms-3">
+                                                        <div class="fw-bold">{{ child_comment.author }}</div>
+                                                        {{ child_comment.message }}
+                                                        <a href="{% url "blog:comment_edit" post.pk comment.pk %}"><i class="fa-regular fa-pen-to-square fa-bounce" style="color: #0d6efd;"></i></a>
+                                            <a href="{% url "blog:comment_delete" post.pk comment.pk %}"><i class="fa-regular fa-trash-can fa-bounce" style="color: #0d6efd;"></i></a>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% empty %}
+                                    <p>아직 댓글이 없습니다. :(</p>
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
-                {% endfor %}
-            </div>
-            <br>
-        {% empty %}
-            <p>아직 댓글이 없습니다. :(</p>
-        {% endfor %}
-    </section>
-    
-    <section>
-        <h3>댓글작성</h3>
-        <form method="post">
-            {% csrf_token %}
-            {{comment_form.as_p}}
-            <input type="submit" value="댓글 작성">
-        </form>
-    </section>
-
-    <a href="{% url "blog:post_list" %}" style="text-decoration: none; color: #ff5733;">뒤로가기</a>
-    <a href="{% url "blog:post_edit" post.pk %}" style="text-decoration: none; color: #ff5733;">수정</a>
-    <a href="{% url "blog:post_delete" post.pk %}" style="text-decoration: none; color: #ff5733;">삭제</a>
-
-    <script>
-    document.querySelectorAll('.reply-btn').forEach(function(button) {
-        button.addEventListener('click', function() {
-            var form = button.parentElement.querySelector('.reply-form');
-            if (form.style.display === 'none') {
-                form.style.display = 'block';
-            } else {
-                form.style.display = 'none';
-            }
-        });
-    });
-    </script>
-</body>
-    
-</html>
+                    </section>
+                </div>
+                <style>
+                    .reply-btn {
+                        background: none !important;
+                        border: none;
+                        padding: 0 !important;
+                        /*optional*/
+                        font-family: arial, sans-serif;
+                        /*input has OS specific font-family*/
+                        color: #0d6efd;
+                        text-decoration: underline;
+                        cursor: pointer;
+                    }
+                </style>
+                <script>
+                    document.querySelectorAll('.reply-btn').forEach(function(button) {
+                        button.addEventListener('click', function() {
+                            var form = button.parentElement.querySelector('.reply-form');
+                            if (form.style.display === 'none') {
+                                form.style.display = 'block';
+                            } else {
+                                form.style.display = 'none';
+                            }
+                        });
+                    });
+                </script>
+                {% endblock%}
