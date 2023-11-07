@@ -219,7 +219,7 @@
 |-|-|
 |<img src="https://github.com/ggengmo/Django_Ormi3_Blog/assets/142369113/99fe1798-fcaa-483c-8b39-489c52b97b72" width="100%">회원가입|<img src="https://github.com/ggengmo/Django_Ormi3_Blog/assets/142369113/6a279613-d55c-4090-88f0-eb7534a1a44f" width="100%">로그인|
 |<img src="https://github.com/ggengmo/Django_Ormi3_Blog/assets/142369113/a50b5efa-4918-4beb-9882-96263126ba73" width="100%">프로필|<img src="https://github.com/ggengmo/Django_Ormi3_Blog/assets/142369113/661e0dcf-0dd1-44a4-9185-658917e72ede" width="100%">프로필 수정|
-|<img src="https://github.com/ggengmo/Django_Ormi3_Blog/assets/142369113/661e0dcf-0dd1-44a4-9185-658917e72ede" width="100%">비밀번호 변경|
+|<img src="https://github.com/ggengmo/Django_Ormi3_Blog/assets/142369113/8a552aee-624d-4812-9ec6-eb8c4c52ec60" width="100%">비밀번호 변경|
 
 ## 5. 기능
 ### 5.1 Main
