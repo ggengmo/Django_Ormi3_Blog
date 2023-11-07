@@ -1,31 +1,47 @@
 # accounts > views.py
 
 from typing import Any
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.views.generic import CreateView, DetailView, UpdateView
 from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
 from . models import Profile
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import PasswordForm, ProfileForm
+from .forms import PasswordForm, ProfileForm, SignUpForm, CustomAuthenticationForm
 
 class SignCreateView(CreateView):
-    form_class = UserCreationForm
+    form_class = SignUpForm
     template_name = 'accounts/form.html'
-    success_url = reverse_lazy('accounts:login')
+
+    def get_success_url(self):
+        return reverse_lazy('accounts:login')
 
 signup = SignCreateView.as_view()
 
 class LoginView(LoginView):
-    template_name = 'accounts/form.html'
+    authentication_form = CustomAuthenticationForm
+    template_name = 'accounts/form2.html'
 
     def get_success_url(self):
-        return reverse_lazy('main:index')
+        next_url = self.request.GET.get('next', None)
+        print(next_url)
+        if next_url:
+            return next_url
+        else:
+            return reverse_lazy('blog:post_list')
 
 login = LoginView.as_view()
 
 class LogoutView(LogoutView):
     next_page = reverse_lazy('main:index')
+
+    def get_next_page(self):
+        next_page = super().get_next_page()
+        next_url = self.request.GET.get('next', None)
+        if next_url:
+            return next_url
+        else:
+            return next_page
 
 logout = LogoutView.as_view()
 

@@ -22,9 +22,13 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item"><a class="nav-link" href="{% url "main:index" %}">Main</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url "accounts:signup" %}">Signup</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url "accounts:login" %}">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url "accounts:logout" %}">Logout</a></li>
+                        {% if request.user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'accounts:logout' %}?next={{ request.path }}">Logout</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'accounts:profile' %}">Profile</a></li>
+                        {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'accounts:signup' %}?next={{ request.path }}">Signup</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}?next={{ request.path }}">Login</a></li>
+                        {% endif %}
                         {% comment %} <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Blog</a></li> {% endcomment %}
                     </ul>
                 </div>
@@ -63,7 +67,7 @@
             <div class="card mb-4">
                 <div class="card-header">Side Widget</div>
                 <div class="card-body">
-                    <a href="{% url "blog:post_write" %}" style="text-decoration: none; color: white" class="btn btn-primary">글 작성하기</a>
+                    {% block sidebar %}{% endblock sidebar %}
                 </div>
             </div>
         </div>

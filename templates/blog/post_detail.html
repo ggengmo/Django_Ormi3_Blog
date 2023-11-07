@@ -11,7 +11,11 @@
                             <!-- Post title-->
                             <h1 class="fw-bolder mb-1">{{post.title}}</h1>
                             <!-- Post meta content-->
-                            <div class="text-muted fst-italic mb-2">Posted on {{post.created_at}} by {{post.author}}</div>
+                            <div class="text-muted fst-italic mb-2">
+                                Posted on {{post.created_at}} by {{post.author}}
+                                <br> 
+                                <i class="fa-solid fa-eye" style="color: #0d6efd;"></i> {{post.view_count}}
+                            </div>
                             <!-- Post categories-->
                             {% for tag in post.tag.all  %}
                             <a class="badge bg-secondary text-decoration-none link-light" href="{% url 'blog:post_search' %}?q={{ tag.name }}">{{ tag.name }}</a>
@@ -74,8 +78,8 @@
                                                     <div class="ms-3">
                                                         <div class="fw-bold">{{ child_comment.author }}</div>
                                                         {{ child_comment.message }}
-                                                        <a href="{% url "blog:comment_edit" post.pk comment.pk %}"><i class="fa-regular fa-pen-to-square fa-bounce" style="color: #0d6efd;"></i></a>
-                                            <a href="{% url "blog:comment_delete" post.pk comment.pk %}"><i class="fa-regular fa-trash-can fa-bounce" style="color: #0d6efd;"></i></a>
+                                                        <a href="{% url "blog:comment_edit" post.pk child_comment.pk %}"><i class="fa-regular fa-pen-to-square fa-bounce" style="color: #0d6efd;"></i></a>
+                                            <a href="{% url "blog:comment_delete" post.pk child_comment.pk %}"><i class="fa-regular fa-trash-can fa-bounce" style="color: #0d6efd;"></i></a>
                                                     </div>
                                                 </div>
                                             {% endfor %}
@@ -113,4 +117,8 @@
                         });
                     });
                 </script>
-                {% endblock%}
+                {% endblock content %}
+                {% block sidebar %}
+                <a href="{% url "blog:post_edit" post.pk %}" style="text-decoration: none; color: white" class="btn btn-primary">글 수정하기</a>
+                <a href="{% url "blog:post_delete" post.pk %}" style="text-decoration: none; color: white" class="btn btn-primary">글 삭제하기</a>
+                {% endblock sidebar %}

@@ -1,9 +1,26 @@
 # accounts > forms.py
 
 from django import forms
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
 from .models import Profile
 
+class CustomAuthenticationForm(AuthenticationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '이름'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': '비밀번호'}))
+class SignUpForm(UserCreationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '이름'}))
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': '비밀번호'}))
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': '비밀번호 확인'}))
+
+    class Meta:
+        model = User
+        fields = ['username', 'password1', 'password2']
+
+    def save(self, commit=True):
+        user = super().save(commit=True)
+        return user
+    
 class PasswordForm(PasswordChangeForm):
     old_password = forms.CharField(
         widget=forms.PasswordInput(

@@ -31,19 +31,20 @@ class PostDetailView(DetailView):
     
     def get(self, request, *args, **kwargs):
         try:
-            return super().get(request, *args, **kwargs)
+            self.object = self.get_object()
         except Http404:
             return render(request, 'blog/404.html', status=404)
+        return super().get(request, *args, **kwargs)
     
     def get_object(self, queryset=None):
+        pk = self.kwargs.get('pk')
         try:
-            pk = self.kwargs.get('pk')
             post = Post.objects.get(pk=pk)
-            post.view_count += 1
-            post.save()
         except Post.DoesNotExist:
-            return render(self.request, 'blog/404.html', status=404)
-        return super().get_object(queryset)
+            raise Http404('게시글을 찾을 수 없습니다.')
+        post.view_count += 1
+        post.save()
+        return post
     
     def post(self, request, *args, **kwargs):
         form = CommentForm(request.POST)
