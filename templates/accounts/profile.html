@@ -1,21 +1,27 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>프로필</title>
+    <link rel="stylesheet" href="{% static "css4/profile.css" %}">
 </head>
 <body>
     <h1>프로필 페이지입니다.</h1>
     {% if profile.profile_image %}
-        프로필 사진<br>
         <img src="{{profile.profile_image.url}}" alt="">
+        {% else %}
+        <img src="https://via.placeholder.com/300.jpg" alt="300 * 300 size image">
     {% endif %}
     <p>{{user}}의 프로필 페이지입니다.</p>
-    <p>{{user}}의 닉네임은 {{profile.nickname}} 입니다.</p>
+    <p>닉네임: {{profile.nickname}} 입니다.</p>
     <p>{{profile.created_at}}</p>
-    <a href="{% url "accounts:profile_update" %}" style="text-decoration: none; color: #ff5733;">프로필 수정하기</a>
-    <a href="{% url "main:index" %}" style="text-decoration: none; color: #ff5733;">홈으로 가기</a>
-    <a href="{% url "accounts:change_password" %}" style="text-decoration: none; color: #ff5733;">비밀번호 변경하기</a>
+    <div class="link-container">
+        <a href="{% url "accounts:profile_update" %}">프로필 수정하기</a>
+        <a href="{% url "main:index" %}">홈으로 가기</a>
+        <a href="{% url "blog:post_list" %}">블로그 가기</a>
+        <a href="{% url "accounts:change_password" %}">비밀번호 변경하기</a>
+    </div>
 </body>
 </html>

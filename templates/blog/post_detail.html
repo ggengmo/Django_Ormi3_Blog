@@ -54,7 +54,16 @@
                                     <!-- Comment with nested comments-->
                                     <div class="d-flex mb-4">
                                         <!-- Parent comment-->
-                                        <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                        <div class="flex-shrink-0">
+                                            <!-- Parent comment-->
+                                            <div class="flex-shrink-0">
+                                                {% if comment.author.profile.profile_image and comment.author.profile.profile_image.url %}
+                                                <img class="rounded-circle" src="{{comment.author.profile.profile_image.url}}" alt="" style="width:50px; height:50px; object-fit: cover;">
+                                                {% else %}
+                                                <img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." />
+                                                {% endif %}
+                                            </div>
+                                        </div>
                                         <div class="ms-3" style="margin-left: 0; width: 100%;">
                                             <div class="fw-bold">{{ comment.author }}</div>
                                             {{ comment.message }}
@@ -74,12 +83,18 @@
                                             <!-- Child comments -->
                                             {% for child_comment in comment.reply.all %}
                                                 <div class="d-flex mt-4">
-                                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                                    <div class="flex-shrink-0">
+                                                        {% if child_comment.author.profile.profile_image and child_comment.author.profile.profile_image.url %}
+                                                        <img class="rounded-circle" src="{{child_comment.author.profile.profile_image.url}}" alt="" style="width:50px; height:50px; object-fit: cover;">
+                                                        {% else %}
+                                                        <img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." />
+                                                        {% endif %}
+                                                    </div>
                                                     <div class="ms-3">
                                                         <div class="fw-bold">{{ child_comment.author }}</div>
                                                         {{ child_comment.message }}
                                                         <a href="{% url "blog:comment_edit" post.pk child_comment.pk %}"><i class="fa-regular fa-pen-to-square fa-bounce" style="color: #0d6efd;"></i></a>
-                                            <a href="{% url "blog:comment_delete" post.pk child_comment.pk %}"><i class="fa-regular fa-trash-can fa-bounce" style="color: #0d6efd;"></i></a>
+                                                        <a href="{% url "blog:comment_delete" post.pk child_comment.pk %}"><i class="fa-regular fa-trash-can fa-bounce" style="color: #0d6efd;"></i></a>
                                                     </div>
                                                 </div>
                                             {% endfor %}
@@ -108,7 +123,7 @@
                 <script>
                     document.querySelectorAll('.reply-btn').forEach(function(button) {
                         button.addEventListener('click', function() {
-                            var form = button.parentElement.querySelector('.reply-form');
+                            let form = button.parentElement.querySelector('.reply-form');
                             if (form.style.display === 'none') {
                                 form.style.display = 'block';
                             } else {

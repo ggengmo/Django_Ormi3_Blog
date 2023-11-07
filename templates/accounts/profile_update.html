@@ -1,22 +1,28 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko-KR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>프로필 수정</title>
-    
+    <link rel="stylesheet" href="{% static "css4/profile_update.css" %}">
 </head>
-    
 <body>
+    <h1>프로필 수정 페이지입니다.</h1>
     {% if profile.profile_image %}
-        현재 프로필 사진:<br>
-        <img src="{{profile.profile_image.url}}" alt="">
+        <div class="img-container">
+            <img id="profileImagePreview" src="{{profile.profile_image.url}}" alt="">
+        </div>
+    {% else %}
+        <img id="profileImagePreview" src="https://via.placeholder.com/300.jpg" alt="300 * 300 size image">
     {% endif %}
-    <form action="" method="post" enctype="multipart/form-data">
+    <form class="profile-form" action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{form.as_p}}
-        <button type="submit">수정하기</button>
+        <button type="submit" class="button">수정하기</button>
+        <a href="{% url "accounts:profile" %}" class="button">뒤로가기</a>
     </form>
+    <script src="{% static "js3/profile_update.js" %}"></script>
 </body>
-    
 </html>
+
