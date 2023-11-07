@@ -241,7 +241,7 @@
 - 로그인 한 사용자의 프로필을 수정할 수 있습니다.
 
 <img src="https://github.com/ggengmo/Django_Ormi3_Blog/assets/142369113/18d6039b-df6e-48d3-9a99-818443fefd0d" width="100%"><br>
--사용자의 프로필 페이지에서 비밀번호 변경을 할 수 있습니다.
+- 사용자의 프로필 페이지에서 비밀번호 변경을 할 수 있습니다.
 
 ### 5.3 Blog
 <img src="https://github.com/ggengmo/Django_Ormi3_Blog/assets/142369113/aaf1334d-4a13-4e0a-8e35-4cc08913e001" width="100%"><br>
