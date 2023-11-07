@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko-KR">
 <head>
@@ -23,12 +24,13 @@
             color: #555;
         }
     </style>
+    <link rel="icon" type="image/x-icon" href="{% static "assets/favicon.ico" %}" />
 </head>
     
 <body>
     <div class="container">
-        <h1>Oops! Permission not found</h1>
-        <p>You do not have permission for that page. Let's get you back on track:</p>
+        <h1>이런! 권한이 없습니다!</h1>
+        <p>해당 페이지에 대한 권한이 없습니다.</p>
         <a href="{% url "blog:post_list" %}" style="text-decoration: none; color: #ff5733;">블로그로 돌아가기</a>
     </div>
 </body>

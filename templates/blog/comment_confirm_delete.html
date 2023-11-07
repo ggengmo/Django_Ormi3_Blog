@@ -1,20 +1,61 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko-KR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>댓글 삭제</title>
-    
+    <link rel="icon" type="image/x-icon" href="{% static "assets/favicon.ico" %}" />
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F3F3F3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        form {
+            background-color: #FFFFFF;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333333;
+        }
+        p {
+            color: #666666;
+        }
+        .btn {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background-color: #007BFF;
+        }
+        .btn-secondary {
+            background-color: #6C757D;
+        }
+    </style>
 </head>
-    
+
 <body>
     <form action="" method="post">
         <h1>댓글 삭제</h1>
         {% csrf_token %}
         <p>댓글을 삭제하시겠습니까?</p>
         <input type="submit" value="네!" class='btn btn-primary'>
-        <input type="button" value="아니요!" onclick="location.href = '{% url 'blog:post_detail' comment.pk %}'">
+        <input type="button" value="아니요!" onclick="location.href = '{% url 'blog:post_detail' comment.pk %}'" class='btn btn-secondary'>
     </form>
 </body>
-    
+
 </html>

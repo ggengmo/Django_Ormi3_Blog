@@ -10,6 +10,7 @@ from django.db.models import Q
 from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 class PostListView(ListView):
     model = Post
@@ -30,30 +31,33 @@ class PostDetailView(DetailView):
     model = Post
     
     def get(self, request, *args, **kwargs):
-        try:
-            self.object = self.get_object()
-        except Http404:
+        self.object = self.get_object()
+        if self.object is None:
             return render(request, 'blog/404.html', status=404)
-        return super().get(request, *args, **kwargs)
-    
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
     def get_object(self, queryset=None):
         pk = self.kwargs.get('pk')
-        try:
-            post = Post.objects.get(pk=pk)
-        except Post.DoesNotExist:
-            raise Http404('게시글을 찾을 수 없습니다.')
+        post = Post.objects.filter(pk=pk).first()
+        if post is None:
+            return None
         post.view_count += 1
         post.save()
         return post
     
     def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not request.user.is_authenticated:
+            return redirect('accounts:login')
+        
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.post = self.get_object()
+            comment.post = self.object
             comment.author = request.user
             comment.save()
-            return redirect('blog:post_detail', pk=self.get_object().pk)
+            return redirect('blog:post_detail', pk=self.object.pk)
         else:
             return self.get(request, *args, **kwargs)
 
@@ -133,6 +137,9 @@ post_search = SearchListView.as_view()
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
     form_class = CommentForm
+    
+    def get_login_url(self):
+        return reverse_lazy('accounts:login')
 
     def form_valid(self, form):
         form.instance.post_id = self.kwargs['pk']
@@ -144,6 +151,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         return self.object.post.get_absolute_url()
 
 comment_new = CommentCreateView.as_view()
+
 
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Comment

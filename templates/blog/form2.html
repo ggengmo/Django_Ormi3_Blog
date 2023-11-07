@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>글 수정</title>
     <link rel="stylesheet" href="{% static "css/form2.css" %}">
+    <link rel="icon" type="image/x-icon" href="{% static "assets/favicon.ico" %}" />
 </head>
     
 <body>
@@ -30,11 +31,15 @@
                                 {{ form.tag }}
                             </div>
                             <div class="mb-3">
-                                <label for="{{ form.main_image.id_for_label }}" class="form-label">이미지 업로드</label>
+                                <label for="{{ form.main_image.id_for_label }}" class="form-label">
+                                    <i class="fa-solid fa-image" style="color: #0948b3;"></i>
+                                    이미지 업로드</label>
                                 {{ form.main_image}}
                             </div>
                             <div class="mb-3">
-                                <label for="{{ form.file_upload.id_for_label }}" class="form-label">파일 업로드</label>
+                                <label for="{{ form.file_upload.id_for_label }}" class="form-label">
+                                    <i class="fa-solid fa-file" style="color: #2e62bd;"></i>
+                                    파일 업로드</label>
                                 {{ form.file_upload}}
                             </div>
                             <div class="d-flex justify-content-between">
@@ -47,6 +52,7 @@
             </div>
         </div>
     </div>
+    <script src="https://kit.fontawesome.com/fd0973be19.js" crossorigin="anonymous"></script>
 </body>
     
 </html>

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,12 +24,13 @@
             color: #555;
         }
     </style>
+    <link rel="icon" type="image/x-icon" href="{% static "assets/favicon.ico" %}" />
 </head>
 <body>
     <div class="container">
-        <h1>Oops! Page Not Found</h1>
-        <p>The page you're looking for doesn't exist. Let's get you back on track:</p>
-        <a href="{% url "blog:post_list" %}" style="text-decoration: none; color: #ff5733;">Go to Blog</a>
+        <h1>이런! 페이지를 찾을 수 없습니다!</h1>
+        <p>찾으시는 페이지가 존재하지 않습니다.</p>
+        <a href="{% url "blog:post_list" %}" style="text-decoration: none; color: #ff5733;">블로그로 돌아가기</a>
     </div>
 </body>
 </html>
