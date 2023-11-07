@@ -235,7 +235,7 @@
 
 ### 5.2 Accounts
 <img src="https://github.com/ggengmo/Django_Ormi3_Blog/assets/142369113/b3762c5a-4af5-4cd2-8526-f68ade3a6f55" width="100%"><br>
-- 회원가입과 로그인 기능입니다.
+- 프로필과 회원가입, 로그인 기능입니다.
 
 <img src="https://github.com/ggengmo/Django_Ormi3_Blog/assets/142369113/4f314fc5-0cd0-4cef-b9df-10a21d1d2452" width="100%"><br>
 - 로그인 한 사용자의 프로필을 수정할 수 있습니다.
