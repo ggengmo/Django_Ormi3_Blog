@@ -55,7 +55,6 @@
  ┃ ┣ 📜apps.py
  ┃ ┣ 📜forms.py
  ┃ ┣ 📜models.py
- ┃ ┣ 📜tests.py
  ┃ ┣ 📜urls.py
  ┃ ┣ 📜views.py
  ┃ ┗ 📜__init__.py
@@ -66,7 +65,6 @@
  ┃ ┣ 📜apps.py
  ┃ ┣ 📜forms.py
  ┃ ┣ 📜models.py
- ┃ ┣ 📜tests.py
  ┃ ┣ 📜urls.py
  ┃ ┣ 📜views.py
  ┃ ┗ 📜__init__.py
@@ -83,7 +81,6 @@
  ┃ ┣ 📜admin.py
  ┃ ┣ 📜apps.py
  ┃ ┣ 📜models.py
- ┃ ┣ 📜tests.py
  ┃ ┣ 📜urls.py
  ┃ ┣ 📜views.py
  ┃ ┗ 📜__init__.py
@@ -95,42 +92,40 @@
  ┣ 📂static
  ┃ ┣ 📂assets
  ┃ ┣ 📂css
- ┃ ┃ ┣ 📜form.css
- ┃ ┃ ┣ 📜form2.css
- ┃ ┃ ┣ 📜form3.css
- ┃ ┃ ┗ 📜styles.css
- ┃ ┣ 📂css2
- ┃ ┃ ┣ 📜style.css
- ┃ ┃ ┗ 📜style.css.map
- ┃ ┣ 📂css3
- ┃ ┃ ┣ 📜mdb.min.css
+ ┃ ┃ ┣ 📜form.css                 // blog > form.html(글 작성)
+ ┃ ┃ ┣ 📜form2.css                // blog > form2.html(글 수정)         
+ ┃ ┃ ┣ 📜form3.css                // blog > form3.html(댓글 수정)
+ ┃ ┃ ┗ 📜styles.css               // base.html
+ ┃ ┣ 📂css2                       // accounts > form.html(회원가입), form2.html(로그인)
+ ┃ ┃ ┣ 📜style.css                
+ ┃ ┃ ┗ 📜style.css.map    
+ ┃ ┣ 📂css3                       // main > index.html(메인)
+ ┃ ┃ ┣ 📜mdb.min.css            
  ┃ ┃ ┣ 📜mdb.min.css.map
  ┃ ┃ ┣ 📜mdb.rtl.min.css
  ┃ ┃ ┣ 📜mdb.rtl.min.css.map
  ┃ ┃ ┗ 📜style.css
- ┃ ┣ 📂css4
+ ┃ ┣ 📂css4                       // accounts
  ┃ ┃ ┣ 📜change_password.css
  ┃ ┃ ┣ 📜profile.css
  ┃ ┃ ┗ 📜profile_update.css
- ┃ ┣ 📂fonts
+ ┃ ┣ 📂fonts                      // accounts > form.html(회원가입), form2.html(로그인) 
  ┃ ┃ ┣ 📂material-icon
  ┃ ┃ ┃ ┣ 📂css
  ┃ ┃ ┃ ┗ 📂fonts
- ┃ ┣ 📂images
+ ┃ ┣ 📂images                     // accounts > form.html(회원가입), form2.html(로그인)
  ┃ ┃ ┣ 📜signin-image.jpg
  ┃ ┃ ┗ 📜signup-image.jpg
- ┃ ┣ 📂img
- ┃ ┃ ┗ 📜mdb-favicon.ico
- ┃ ┣ 📂js
- ┃ ┃ ┣ 📜main.js
+ ┃ ┣ 📂js                         // base.html
+ ┃ ┃ ┣ 📜main.js                  
  ┃ ┃ ┗ 📜scripts.js
- ┃ ┣ 📂js2
- ┃ ┃ ┣ 📜mdb.min.js
+ ┃ ┣ 📂js2                        // main > index.html(메인)
+ ┃ ┃ ┣ 📜mdb.min.js               
  ┃ ┃ ┗ 📜mdb.min.js.map
- ┃ ┣ 📂js3
+ ┃ ┣ 📂js3                        // accounts > profile_update.html
  ┃ ┃ ┗ 📜profile_update.js
- ┃ ┣ 📂vendor
- ┃ ┃ ┗ 📂jquery
+ ┃ ┣ 📂vendor                     // accounts > form.html(회원가입), form2.html(로그인)
+ ┃ ┃ ┗ 📂jquery     
  ┃ ┃ ┃ ┣ 📜jquery-ui.min.js
  ┃ ┃ ┃ ┗ 📜jquery.min.js
  ┃ ┣ 📜index.html
