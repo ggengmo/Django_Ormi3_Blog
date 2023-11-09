@@ -69,9 +69,6 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         return self.request.user.profile
-    
-    # def get_initial(self):
-    #     return {'name': '', 'nickname': '', 'email': ''}
 
     def form_valid(self, form):
         profile = form.save(commit=False)
