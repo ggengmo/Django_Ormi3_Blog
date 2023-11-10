@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +16,6 @@
     <link rel="icon" type="image/x-icon" href="{% static "assets/favicon.ico" %}" />
 </head>
 <body>
-
     <div class="main">
         <!-- Sing in  Form -->
         <section class="sign-in">
@@ -25,7 +25,6 @@
                         <figure><img src="{% static "images/signin-image.jpg" %}" alt="sing up image"></figure>
                         <a href="{% url "accounts:signup" %}" class="signup-image-link">Create an account</a>
                     </div>
-
                     <div class="signin-form">
                         <h2 class="form-title">Login</h2>
                         <form method="post" class="register-form" id="login-form" action="?next={{ request.GET.next }}">
@@ -57,9 +56,7 @@
                 </div>
             </div>
         </section>
-
     </div>
-
     <!-- JS -->
     <script src="https://kit.fontawesome.com/fd0973be19.js" crossorigin="anonymous"></script>
     <script src="{% static "vendor/jquery/jquery.min.js" %}"></script>
