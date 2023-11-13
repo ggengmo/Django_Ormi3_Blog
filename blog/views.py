@@ -24,7 +24,7 @@ class PostListView(ListView):
         context = super().get_context_data(**kwargs)
         context['tags'] = Tag.objects.all()  # 태그 리스트를 컨텍스트에 추가합니다.
         return context
-    
+
 post_list = PostListView.as_view()
 
 class PostDetailView(DetailView):
@@ -67,7 +67,7 @@ class PostDetailView(DetailView):
         context['comment_form'] = CommentForm()
         context['tags'] = Tag.objects.all()
         return context
-    
+
 post_detail = PostDetailView.as_view()
 
 class PostCreateview(LoginRequiredMixin, CreateView):
@@ -98,7 +98,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if self.raise_exception or self.request.user.is_authenticated:
             return render(self.request, 'blog/403.html', status=403)
         return super().handle_no_permission()
-    
+
 post_edit = PostUpdateView.as_view()
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):

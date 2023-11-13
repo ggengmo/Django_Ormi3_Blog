@@ -76,5 +76,5 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         profile.user.save()
         profile.save()
         return super().form_valid(form)
-    
+
 profile_update = ProfileUpdateView.as_view()
